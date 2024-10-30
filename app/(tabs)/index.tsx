@@ -1,16 +1,40 @@
-import React from 'react';
+// index.tsx
+import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import Status from '@/components/Status';
 import MessageList from '@/components/MessageList';
-import InputMethodEditor from '@/components/ImageGrid';
+import InputMethodEditor from '@/components/InputMethodEditor';
 import Toolbar from '@/components/Toolbar';
+import { createImageMessage, createLocationMessage, createTextMessage } from '@/utils/MessageUtils';
 
 export default function App() {
+    const [messages, setMessages] = useState([
+        createImageMessage('https://unsplash.it/300/300'),
+        createTextMessage('World'),
+        createTextMessage('Hello'),
+        createLocationMessage({
+            latitude: 37.78825,
+            longitude: -122.4324,
+        }),
+    ]);
+
+    const onDeleteMessage = (messageId) => {
+        setMessages((prevMessages) => prevMessages.filter((message) => message.id !== messageId));
+    };
+
+    const handlePressMessage = (message) => {
+        console.log('Pressed message:', message);
+    };
+
     return (
         <View style={styles.container}>
             <Status />
             <View style={styles.content}>
-                <MessageList />
+                <MessageList 
+                    messages={messages} 
+                    onPressMessage={handlePressMessage} 
+                    onDeleteMessage={onDeleteMessage} // Pass the delete function
+                />
             </View>
             <View style={styles.inputMethodEditor}>
                 <InputMethodEditor />
@@ -20,7 +44,7 @@ export default function App() {
             </View>
         </View>
     );
-};
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -28,9 +52,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     content: {
-        flex: 1,
-        backgroundColor: 'white',
-        paddingTop: 1,
+        flex: 9,
     },
     inputMethodEditor: {
         flex: 1,
