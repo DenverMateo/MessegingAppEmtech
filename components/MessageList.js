@@ -122,7 +122,6 @@ export default class MessageList extends React.Component {
                     keyExtractor={keyExtractor}
                     keyboardShouldPersistTaps="handled"
                 />
-                {/* Fullscreen Modal */}
                 <Modal
                     visible={fullscreenImageId !== null}
                     transparent={true}

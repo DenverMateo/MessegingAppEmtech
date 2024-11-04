@@ -17,6 +17,8 @@ export default function App() {
             longitude: -122.4324,
         }),
     ]);
+    
+    const [isInputFocused, setInputFocused] = useState(false); 
 
     const onDeleteMessage = (messageId) => {
         setMessages((prevMessages) => prevMessages.filter((message) => message.id !== messageId));
@@ -26,6 +28,22 @@ export default function App() {
         console.log('Pressed message:', message);
     };
 
+    const handleChangeFocus = (isFocused) => {
+        setInputFocused(isFocused);
+    };
+
+    const handleSubmit = (text) => {
+        setMessages((prevMessages) => [createTextMessage(text), ...prevMessages]);
+    };
+
+    const handlePressToolbarCamera = () => {
+        // Handle camera press
+    };
+
+    const handlePressToolbarLocation = () => {
+        // Handle location press
+    };
+
     return (
         <View style={styles.container}>
             <Status />
@@ -33,14 +51,20 @@ export default function App() {
                 <MessageList 
                     messages={messages} 
                     onPressMessage={handlePressMessage} 
-                    onDeleteMessage={onDeleteMessage} // Pass the delete function
+                    onDeleteMessage={onDeleteMessage} 
                 />
             </View>
             <View style={styles.inputMethodEditor}>
                 <InputMethodEditor />
             </View>
             <View style={styles.toolbar}>
-                <Toolbar />
+                <Toolbar
+                    isFocused={isInputFocused}
+                    onSubmit={handleSubmit}
+                    onChangeFocus={handleChangeFocus}
+                    onPressCamera={handlePressToolbarCamera}
+                    onPressLocation={handlePressToolbarLocation}
+                />
             </View>
         </View>
     );

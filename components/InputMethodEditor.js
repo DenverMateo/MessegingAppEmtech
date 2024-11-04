@@ -5,7 +5,6 @@ const ImaeGrid = () => {
     return(
         <View style = {styles.ImaeGridContainer}>
             <Text>
-                Image Grid
             </Text>
         </View>
     );
