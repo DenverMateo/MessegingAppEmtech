@@ -165,13 +165,13 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     image: {
-        width: 150,
-        height: 150,
+        width: 200,
+        height: 200,
         borderRadius: 8,
     },
     map: {
-        width: 150,
-        height: 100,
+        width: 250,
+        height: 250,
         borderRadius: 8,
     },
     modalContainer: {

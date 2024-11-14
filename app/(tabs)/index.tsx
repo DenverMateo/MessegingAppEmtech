@@ -1,6 +1,6 @@
-// index.tsx
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
+import * as Location from 'expo-location';
 import Status from '@/components/Status';
 import MessageList from '@/components/MessageList';
 import InputMethodEditor from '@/components/InputMethodEditor';
@@ -17,7 +17,7 @@ export default function App() {
             longitude: -122.4324,
         }),
     ]);
-    
+
     const [isInputFocused, setInputFocused] = useState(false); 
 
     const onDeleteMessage = (messageId) => {
@@ -40,9 +40,31 @@ export default function App() {
         // Handle camera press
     };
 
-    const handlePressToolbarLocation = () => {
-        // Handle location press
+    const handlePressToolbarLocation = async () => {
+        // Request location permissions
+        const { status } = await Location.requestForegroundPermissionsAsync();
+    
+        if (status !== 'granted') {
+            Alert.alert('Permission Denied', 'Location permission is required to send your location.');
+            return;
+        }
+    
+        try {
+            // Fetch the current location
+            const location = await Location.getCurrentPositionAsync({});
+            const { latitude, longitude } = location.coords;
+    
+            // Add the location message to the message list
+            setMessages((prevMessages) => [
+                createLocationMessage({ latitude, longitude }),
+                ...prevMessages,
+            ]);
+        } catch (error) {
+            Alert.alert('Location Error', 'Unable to fetch your location. Please try again.');
+            console.error('Error fetching location:', error);
+        }
     };
+    
 
     return (
         <View style={styles.container}>
@@ -55,7 +77,6 @@ export default function App() {
                 />
             </View>
             <View style={styles.inputMethodEditor}>
-                <InputMethodEditor />
             </View>
             <View style={styles.toolbar}>
                 <Toolbar
